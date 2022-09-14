@@ -1,14 +1,13 @@
 import { AbstractCommand } from './AbstractCommand'
 import { WrappedRequest } from '../types/WrappedRequest'
 import { WrappedResponse } from '../types/WrappedResponse'
-import { UserType } from '../types/UserType'
 import { CommandFailedError } from '../errors/CommandFailedError'
 import { RequestVerbType } from '../types/RequestVerbType'
 import { demandEnvVar, demandEnvVarAsNumber } from '../common/utils/EnvironmentUtills'
 import { getClaims, getHeaders } from '../common/utils/AuthContext'
 
-export class UserCreateCommand extends AbstractCommand<void, UserType> {
-  public async execute (userGuid?: string): Promise<UserType> {
+export class UserDeleteCommand extends AbstractCommand<void, void> {
+  public async execute (userGuid?: string): Promise<void> {
     if (getHeaders() === undefined || !('Authorization' in getHeaders())) {
       await this.auth()
     }
@@ -17,15 +16,14 @@ export class UserCreateCommand extends AbstractCommand<void, UserType> {
     userGuid = userGuid ?? getClaims().sub
 
     const wrappedRequest: WrappedRequest<void> = {
-      statuses: { allow: [201], retry: [], reauth: [401] },
+      statuses: { allow: [200], retry: [], reauth: [401] },
       timeout: demandEnvVarAsNumber('ROWANTREE_SERVICE_TIMEOUT'),
       url: `${demandEnvVar('ROWANTREE_SERVICE_ENDPOINT')}/v1/user/${userGuid}`,
-      verb: RequestVerbType.POST
+      verb: RequestVerbType.DELETE
     }
-    const wrappedResponse: WrappedResponse<UserType> = await this.invokeRequest(wrappedRequest)
-    if ((wrappedResponse?.data) !== undefined) {
-      return wrappedResponse?.data
+    const wrappedResponse: WrappedResponse<void> = await this.invokeRequest(wrappedRequest)
+    if ((wrappedResponse?.status) === undefined) {
+      throw new CommandFailedError(`Delete user command failed unexpectedly: ${JSON.stringify(wrappedResponse)}`)
     }
-    throw new CommandFailedError(`Create user command failed unexpectedly: ${JSON.stringify(wrappedResponse)}`)
   }
 }

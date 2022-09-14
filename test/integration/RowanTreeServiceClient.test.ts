@@ -23,6 +23,14 @@ describe('Service Client Tests', function (): void {
     })
   })
 
+  describe('Delete User Command Tests', function () {
+    describe('userDelete', function () {
+      it('should delete a user', async function (): Promise<void> {
+        await client.deleteUser()
+      })
+    })
+  })
+
   // describe('Register User Command Tests', function () {
   //   describe('userRegister', function () {
   //     it('should register a user', async function (): Promise<void> {
