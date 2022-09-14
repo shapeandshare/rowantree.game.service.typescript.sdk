@@ -17,8 +17,16 @@ describe('Service Client Tests', function (): void {
   describe('Create User Command Tests', function () {
     describe('userCreate', function () {
       it('should create a user', async function (): Promise<void> {
-        const user: UserType = await client.createUser()
+        const user: UserType = await client.userCreate()
         console.log(user)
+      })
+    })
+  })
+
+  describe('Set User Active Command Tests', function () {
+    describe('userActiveSet', function () {
+      it('should set a user active', async function (): Promise<void> {
+        await client.userActiveSet()
       })
     })
   })
@@ -26,7 +34,7 @@ describe('Service Client Tests', function (): void {
   describe('Delete User Command Tests', function () {
     describe('userDelete', function () {
       it('should delete a user', async function (): Promise<void> {
-        await client.deleteUser()
+        await client.userDelete()
       })
     })
   })
