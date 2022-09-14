@@ -15,6 +15,10 @@ export class UserDeleteCommand extends AbstractCommand<void, void> {
     // Target the guid provided, otherwise default to the subject of the claims.
     userGuid = userGuid ?? getClaims().sub
 
+    if (userGuid === undefined){
+      throw new CommandFailedError("No target was provided or could be resolved from request")
+    }
+
     const wrappedRequest: WrappedRequest<void> = {
       statuses: { allow: [200], retry: [], reauth: [401] },
       timeout: demandEnvVarAsNumber('ROWANTREE_SERVICE_TIMEOUT'),
