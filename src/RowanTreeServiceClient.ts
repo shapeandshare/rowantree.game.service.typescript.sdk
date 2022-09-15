@@ -1,9 +1,11 @@
 import { RetryOptions } from './types/RetryOptions'
 import { RowanTreeAuthServiceClient } from 'rowantree.auth.typescript.sdk'
 import { UserCreateCommand } from './commands/UserCreateCommand'
-import { UserType } from './types/UserType'
+import { UserWorld } from './types/UserWorld'
 import { UserDeleteCommand } from './commands/UserDeleteCommand'
 import { UserActiveSetCommand } from './commands/UserActiveSetCommand'
+import { UserActiveStatus } from './types/UserActiveStatus'
+import { UserActiveSetRequest } from './types/UserActiveSetRequest'
 
 export class RowanTreeServiceClient {
   readonly #userCreateCommand: UserCreateCommand
@@ -18,7 +20,7 @@ export class RowanTreeServiceClient {
     this.#userActiveSetCommand = new UserActiveSetCommand(authClient, retryOptions)
   }
 
-  public async userCreate (userGuid?: string): Promise<UserType> {
+  public async userCreate (userGuid?: string): Promise<UserWorld> {
     return await this.#userCreateCommand.execute(userGuid)
   }
 
@@ -26,7 +28,8 @@ export class RowanTreeServiceClient {
     await this.#userDeleteCommand.execute(userGuid)
   }
 
-  public async userActiveSet (active: boolean, userGuid?: string): Promise<void> {
-    await this.#userActiveSetCommand.execute(active, userGuid)
+  public async userActiveSet (active: boolean, userGuid?: string): Promise<UserActiveStatus> {
+    const request: UserActiveSetRequest = { active, userGuid }
+    return await this.#userActiveSetCommand.execute(request)
   }
 }

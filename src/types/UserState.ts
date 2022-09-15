@@ -1,5 +1,5 @@
 
-export interface UserStateType {
+export interface UserState {
   active: boolean
   stores: Record<any, any>
   incomes: Record<any, any>

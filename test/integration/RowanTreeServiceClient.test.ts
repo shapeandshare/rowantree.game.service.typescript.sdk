@@ -3,7 +3,7 @@ import { describe } from 'mocha'
 import { config } from 'dotenv'
 import { RowanTreeServiceClient } from '../../src/RowanTreeServiceClient'
 import { RetryOptions, RowanTreeAuthServiceClient } from 'rowantree.auth.typescript.sdk'
-import { UserType } from '../../src/types/UserType'
+import { UserWorld } from '../../src/types/UserWorld'
 config({ path: 'env/.env.offline' })
 
 describe('Service Client Tests', function (): void {
@@ -17,7 +17,7 @@ describe('Service Client Tests', function (): void {
   describe.skip('Create User Command Tests', function () {
     describe('userCreate', function () {
       it('should create a user', async function (): Promise<void> {
-        const user: UserType = await client.userCreate()
+        const user: UserWorld = await client.userCreate()
         console.log(user)
       })
     })
