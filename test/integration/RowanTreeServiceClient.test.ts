@@ -65,6 +65,14 @@ describe('Service Client Tests', function (): void {
     })
   })
 
+  describe('Merchant Transform Command Tests', function () {
+    describe('merchantTransform', function () {
+      it('should perform merchant transform', async function (): Promise<void> {
+        await client.merchantTransform(StoreType.FUR)
+      })
+    })
+  })
+
   describe.skip('Delete User Command Tests', function () {
     describe('userDelete', function () {
       it('should delete a user', async function (): Promise<void> {

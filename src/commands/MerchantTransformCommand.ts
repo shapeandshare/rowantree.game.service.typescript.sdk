@@ -22,7 +22,7 @@ export class MerchantTransformCommand extends AbstractCommand<MerchantTransformR
     }
 
     const wrappedRequest: WrappedRequest<Omit<MerchantTransformRequest, 'userGuid'>> = {
-      statuses: { allow: [200], retry: [], reauth: [401] },
+      statuses: { allow: [201], retry: [], reauth: [401] },
       timeout: demandEnvVarAsNumber('ROWANTREE_SERVICE_TIMEOUT'),
       url: `${demandEnvVar('ROWANTREE_SERVICE_ENDPOINT')}/v1/user/${request.userGuid}/merchant`,
       verb: RequestVerbType.POST,
