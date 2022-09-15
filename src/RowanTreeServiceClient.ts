@@ -13,6 +13,8 @@ import { FeatureType } from './types/FeatureType'
 import { UserTransportRequest } from './types/UserTransportRequest'
 import { UserTransportCommand } from './commands/UserTransportCommand'
 import { FeatureDetailsType } from './types/FeatureDetailsType'
+import { UserState } from './types/UserState'
+import { UserStateGetCommand } from './commands/UserStateGetCommand'
 
 export class RowanTreeServiceClient {
   readonly #userCreateCommand: UserCreateCommand
@@ -20,6 +22,7 @@ export class RowanTreeServiceClient {
   readonly #userActiveSetCommand: UserActiveSetCommand
   readonly #userIncomeSetCommand: UserIncomeSetCommand
   readonly #userTransportCommand: UserTransportCommand
+  readonly #userStateGetCommand: UserStateGetCommand
 
   public constructor (authClient?: RowanTreeAuthServiceClient, retryOptions?: RetryOptions) {
     authClient = (authClient != null) ? authClient : new RowanTreeAuthServiceClient(retryOptions)
@@ -29,6 +32,7 @@ export class RowanTreeServiceClient {
     this.#userActiveSetCommand = new UserActiveSetCommand(authClient, retryOptions)
     this.#userIncomeSetCommand = new UserIncomeSetCommand(authClient, retryOptions)
     this.#userTransportCommand = new UserTransportCommand(authClient, retryOptions)
+    this.#userStateGetCommand = new UserStateGetCommand(authClient, retryOptions)
   }
 
   public async userCreate (userGuid?: string): Promise<UserWorld> {
@@ -52,5 +56,9 @@ export class RowanTreeServiceClient {
   public async userTransport (location: FeatureType, userGuild?: string): Promise<FeatureDetailsType> {
     const request: UserTransportRequest = { location, userGuid: userGuild }
     return await this.#userTransportCommand.execute(request)
+  }
+
+  public async userStateGet (userGuild?: string): Promise<UserState> {
+    return await this.#userStateGetCommand.execute(userGuild)
   }
 }

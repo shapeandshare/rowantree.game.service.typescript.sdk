@@ -7,6 +7,7 @@ import { UserWorld } from '../../src/types/UserWorld'
 import { StoreType } from '../../src/types/StoreType'
 import { FeatureType } from '../../src/types/FeatureType'
 import { FeatureDetailsType } from '../../src/types/FeatureDetailsType'
+import { UserState } from '../../src/types/UserState'
 
 config({ path: 'env/.env.offline' })
 
@@ -18,7 +19,7 @@ describe('Service Client Tests', function (): void {
   before(async function (): Promise<void> {})
   after(async function (): Promise<void> {})
 
-  describe('Create User Command Tests', function () {
+  describe.skip('Create User Command Tests', function () {
     describe('userCreate', function () {
       it('should create a user', async function (): Promise<void> {
         const user: UserWorld = await client.userCreate()
@@ -27,7 +28,7 @@ describe('Service Client Tests', function (): void {
     })
   })
 
-  describe('Set User Active Command Tests', function () {
+  describe.skip('Set User Active Command Tests', function () {
     describe('userActiveSet', function () {
       it('should set a user inactive', async function (): Promise<void> {
         await client.userActiveSet(false)
@@ -38,7 +39,7 @@ describe('Service Client Tests', function (): void {
     })
   })
 
-  describe('Set User Income Command Tests', function () {
+  describe.skip('Set User Income Command Tests', function () {
     describe('userIncomeSet', function () {
       it('should set user income a user', async function (): Promise<void> {
         await client.userIncomeSet(StoreType.FUR, 1)
@@ -46,7 +47,7 @@ describe('Service Client Tests', function (): void {
     })
   })
 
-  describe('User Tranport Command Tests', function () {
+  describe.skip('User Transport Command Tests', function () {
     describe('userTransport', function () {
       it('should transport user', async function (): Promise<void> {
         const response: FeatureDetailsType = await client.userTransport(FeatureType.ROOM)
@@ -55,7 +56,16 @@ describe('Service Client Tests', function (): void {
     })
   })
 
-  describe('Delete User Command Tests', function () {
+  describe('User State Get Command Tests', function () {
+    describe('userStateGet', function () {
+      it('should get user state', async function (): Promise<void> {
+        const response: UserState = await client.userStateGet()
+        console.log(JSON.stringify(response))
+      })
+    })
+  })
+
+  describe.skip('Delete User Command Tests', function () {
     describe('userDelete', function () {
       it('should delete a user', async function (): Promise<void> {
         await client.userDelete()

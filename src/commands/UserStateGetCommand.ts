@@ -1,36 +1,35 @@
 import { AbstractCommand } from './AbstractCommand'
-import { WrappedRequest } from '../types/WrappedRequest'
-import { WrappedResponse } from '../types/WrappedResponse'
-import { UserWorld } from '../types/UserWorld'
-import { CommandFailedError } from '../errors/CommandFailedError'
-import { RequestVerbType } from '../types/RequestVerbType'
-import { demandEnvVar, demandEnvVarAsNumber } from '../common/EnvironmentUtils'
+import { UserState } from '../types/UserState'
 import { getClaims, getHeaders } from '../common/AuthContext'
+import { CommandFailedError } from '../errors/CommandFailedError'
+import { WrappedRequest } from '../types/WrappedRequest'
+import { demandEnvVar, demandEnvVarAsNumber } from '../common/EnvironmentUtils'
+import { RequestVerbType } from '../types/RequestVerbType'
+import { WrappedResponse } from '../types/WrappedResponse'
 import { ResponseStateType } from '../types/ResponseStateType'
 
-export class UserCreateCommand extends AbstractCommand<void, UserWorld> {
-  public async execute (userGuid?: string): Promise<UserWorld> {
+export class UserStateGetCommand extends AbstractCommand<any, any> {
+  public async execute (userGuid?: string): Promise<UserState> {
     if (getHeaders() === undefined || !('Authorization' in getHeaders())) {
       await this.auth()
     }
-    console.log(userGuid)
+
     // Target the guid provided, otherwise default to the subject of the claims.
     userGuid = userGuid ?? getClaims().sub
-    console.log(userGuid)
     if (userGuid === undefined) {
       throw new CommandFailedError('No target was provided or could be resolved from request')
     }
 
     const wrappedRequest: WrappedRequest<void> = {
-      statuses: { allow: [201], retry: [], reauth: [401] },
+      statuses: { allow: [200], retry: [], reauth: [401] },
       timeout: demandEnvVarAsNumber('ROWANTREE_SERVICE_TIMEOUT'),
-      url: `${demandEnvVar('ROWANTREE_SERVICE_ENDPOINT')}/v1/user/${userGuid}`,
-      verb: RequestVerbType.POST
+      url: `${demandEnvVar('ROWANTREE_SERVICE_ENDPOINT')}/v1/user/${userGuid}/state`,
+      verb: RequestVerbType.GET
     }
-    const wrappedResponse: WrappedResponse<UserWorld> = await this.invokeRequest(wrappedRequest)
+    const wrappedResponse: WrappedResponse<UserState> = await this.invokeRequest(wrappedRequest)
     if (wrappedResponse.state === ResponseStateType.SUCCESS && (wrappedResponse?.data) !== undefined) {
       return wrappedResponse?.data
     }
-    throw new CommandFailedError(`Create user command failed unexpectedly: ${JSON.stringify(wrappedResponse)}`)
+    throw new CommandFailedError(`Get user state command failed unexpectedly: ${JSON.stringify(wrappedResponse)}`)
   }
 }
