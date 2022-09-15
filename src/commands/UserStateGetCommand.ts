@@ -1,37 +1,35 @@
 import { AbstractCommand } from './AbstractCommand'
+import { UserState } from '../types/UserState'
 import { getClaims, getHeaders } from '../common/AuthContext'
 import { CommandFailedError } from '../errors/CommandFailedError'
 import { WrappedRequest } from '../types/WrappedRequest'
 import { demandEnvVar, demandEnvVarAsNumber } from '../common/EnvironmentUtils'
 import { RequestVerbType } from '../types/RequestVerbType'
-import { UserActiveStatus } from '../types/UserActiveStatus'
 import { WrappedResponse } from '../types/WrappedResponse'
 import { ResponseStateType } from '../types/ResponseStateType'
-import { UserActiveSetRequest } from '../types/UserActiveSetRequest'
 
-export class UserActiveSetCommand extends AbstractCommand<UserActiveStatus, UserActiveStatus> {
-  public async execute (request: UserActiveSetRequest): Promise<UserActiveStatus> {
+export class UserStateGetCommand extends AbstractCommand<any, any> {
+  public async execute (userGuid?: string): Promise<UserState> {
     if (getHeaders() === undefined || !('Authorization' in getHeaders())) {
       await this.auth()
     }
 
     // Target the guid provided, otherwise default to the subject of the claims.
-    request.userGuid = request.userGuid ?? getClaims().sub
-    if (request.userGuid === undefined) {
+    userGuid = userGuid ?? getClaims().sub
+    if (userGuid === undefined) {
       throw new CommandFailedError('No target was provided or could be resolved from request')
     }
 
-    const wrappedRequest: WrappedRequest<UserActiveStatus> = {
+    const wrappedRequest: WrappedRequest<void> = {
       statuses: { allow: [200], retry: [], reauth: [401] },
       timeout: demandEnvVarAsNumber('ROWANTREE_SERVICE_TIMEOUT'),
-      url: `${demandEnvVar('ROWANTREE_SERVICE_ENDPOINT')}/v1/user/${request.userGuid}/active`,
-      verb: RequestVerbType.POST,
-      data: request
+      url: `${demandEnvVar('ROWANTREE_SERVICE_ENDPOINT')}/v1/user/${userGuid}/state`,
+      verb: RequestVerbType.GET
     }
-    const wrappedResponse: WrappedResponse<UserActiveStatus> = await this.invokeRequest(wrappedRequest)
-    if (wrappedResponse.state === ResponseStateType.SUCCESS && ((wrappedResponse?.data) !== undefined)) {
+    const wrappedResponse: WrappedResponse<UserState> = await this.invokeRequest(wrappedRequest)
+    if (wrappedResponse.state === ResponseStateType.SUCCESS && (wrappedResponse?.data) !== undefined) {
       return wrappedResponse?.data
     }
-    throw new CommandFailedError(`User active state set command failed unexpectedly: ${JSON.stringify(wrappedResponse)}`)
+    throw new CommandFailedError(`Get user state command failed unexpectedly: ${JSON.stringify(wrappedResponse)}`)
   }
 }

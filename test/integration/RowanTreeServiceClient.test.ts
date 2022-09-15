@@ -3,7 +3,12 @@ import { describe } from 'mocha'
 import { config } from 'dotenv'
 import { RowanTreeServiceClient } from '../../src/RowanTreeServiceClient'
 import { RetryOptions, RowanTreeAuthServiceClient } from 'rowantree.auth.typescript.sdk'
-import { UserType } from '../../src/types/UserType'
+import { UserWorld } from '../../src/types/UserWorld'
+import { StoreType } from '../../src/types/StoreType'
+import { FeatureType } from '../../src/types/FeatureType'
+import { FeatureDetailsType } from '../../src/types/FeatureDetailsType'
+import { UserState } from '../../src/types/UserState'
+
 config({ path: 'env/.env.offline' })
 
 describe('Service Client Tests', function (): void {
@@ -17,41 +22,53 @@ describe('Service Client Tests', function (): void {
   describe.skip('Create User Command Tests', function () {
     describe('userCreate', function () {
       it('should create a user', async function (): Promise<void> {
-        const user: UserType = await client.userCreate()
+        const user: UserWorld = await client.userCreate()
         console.log(user)
       })
     })
   })
 
-  describe('Set User Active Command Tests', function () {
-    async function delay (seconds: number): Promise<void> {
-      return await new Promise(resolve => setTimeout(resolve, seconds * 1000))
-    }
-
+  describe.skip('Set User Active Command Tests', function () {
     describe('userActiveSet', function () {
-      it('should set a user active', async function (): Promise<void> {
-        await client.userActiveSet(true)
-      })
       it('should set a user inactive', async function (): Promise<void> {
         await client.userActiveSet(false)
       })
-      it('should set a user inactive', async function (): Promise<void> {
-        await client.userActiveSet(true, 'asd')
-        await delay(1)
+      it('should set a user active', async function (): Promise<void> {
         await client.userActiveSet(true)
-        await delay(1)
-        await client.userActiveSet(true)
-        await delay(1)
-        // await client.userActiveSet(true)
-        // await client.userActiveSet(true)
-        // await client.userActiveSet(true)
-        // await client.userActiveSet(true)
-        // await client.userActiveSet(true)
-        // await client.userActiveSet(true)
-        // await client.userActiveSet(true)
-        // await client.userActiveSet(true)
-        // await client.userActiveSet(true)
-        // await client.userActiveSet(true)
+      })
+    })
+  })
+
+  describe.skip('Set User Income Command Tests', function () {
+    describe('userIncomeSet', function () {
+      it('should set user income a user', async function (): Promise<void> {
+        await client.userIncomeSet(StoreType.FUR, 1)
+      })
+    })
+  })
+
+  describe.skip('User Transport Command Tests', function () {
+    describe('userTransport', function () {
+      it('should transport user', async function (): Promise<void> {
+        const response: FeatureDetailsType = await client.userTransport(FeatureType.ROOM)
+        console.log(response)
+      })
+    })
+  })
+
+  describe('User State Get Command Tests', function () {
+    describe('userStateGet', function () {
+      it('should get user state', async function (): Promise<void> {
+        const response: UserState = await client.userStateGet()
+        console.log(JSON.stringify(response))
+      })
+    })
+  })
+
+  describe('Merchant Transform Command Tests', function () {
+    describe('merchantTransform', function () {
+      it('should perform merchant transform', async function (): Promise<void> {
+        await client.merchantTransform(StoreType.FUR)
       })
     })
   })

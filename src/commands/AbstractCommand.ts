@@ -27,6 +27,7 @@ export abstract class AbstractCommand<TRequestDataType, TResponseDataType> {
   protected async auth (): Promise<void> {
     const token: Token = await this.#authClient.authUser(demandEnvVar('ACCESS_USERNAME'), demandEnvVar('ACCESS_PASSWORD'))
     const claims: TokenClaims = this.#authClient.decodeJwt(token.accessToken)
+    console.log(claims)
     setHeader('Authorization', `Bearer ${token.accessToken}`)
     setClaims(claims)
   }

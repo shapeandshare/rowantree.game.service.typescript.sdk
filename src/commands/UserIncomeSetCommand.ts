@@ -1,37 +1,36 @@
 import { AbstractCommand } from './AbstractCommand'
+import { UserIncomeSetRequest } from '../types/UserIncomeSetRequest'
 import { getClaims, getHeaders } from '../common/AuthContext'
 import { CommandFailedError } from '../errors/CommandFailedError'
 import { WrappedRequest } from '../types/WrappedRequest'
 import { demandEnvVar, demandEnvVarAsNumber } from '../common/EnvironmentUtils'
 import { RequestVerbType } from '../types/RequestVerbType'
-import { UserActiveStatus } from '../types/UserActiveStatus'
 import { WrappedResponse } from '../types/WrappedResponse'
 import { ResponseStateType } from '../types/ResponseStateType'
-import { UserActiveSetRequest } from '../types/UserActiveSetRequest'
 
-export class UserActiveSetCommand extends AbstractCommand<UserActiveStatus, UserActiveStatus> {
-  public async execute (request: UserActiveSetRequest): Promise<UserActiveStatus> {
+export class UserIncomeSetCommand extends AbstractCommand<UserIncomeSetRequest, void> {
+  public async execute (request: UserIncomeSetRequest): Promise<void> {
     if (getHeaders() === undefined || !('Authorization' in getHeaders())) {
       await this.auth()
     }
 
     // Target the guid provided, otherwise default to the subject of the claims.
     request.userGuid = request.userGuid ?? getClaims().sub
+
     if (request.userGuid === undefined) {
       throw new CommandFailedError('No target was provided or could be resolved from request')
     }
 
-    const wrappedRequest: WrappedRequest<UserActiveStatus> = {
+    const wrappedRequest: WrappedRequest<Omit<UserIncomeSetRequest, 'userGuid'>> = {
       statuses: { allow: [200], retry: [], reauth: [401] },
       timeout: demandEnvVarAsNumber('ROWANTREE_SERVICE_TIMEOUT'),
-      url: `${demandEnvVar('ROWANTREE_SERVICE_ENDPOINT')}/v1/user/${request.userGuid}/active`,
+      url: `${demandEnvVar('ROWANTREE_SERVICE_ENDPOINT')}/v1/user/${request.userGuid}/income`,
       verb: RequestVerbType.POST,
-      data: request
+      data: { incomeSourceName: request.incomeSourceName, amount: request.amount }
     }
-    const wrappedResponse: WrappedResponse<UserActiveStatus> = await this.invokeRequest(wrappedRequest)
-    if (wrappedResponse.state === ResponseStateType.SUCCESS && ((wrappedResponse?.data) !== undefined)) {
-      return wrappedResponse?.data
+    const wrappedResponse: WrappedResponse<void> = await this.invokeRequest(wrappedRequest)
+    if (wrappedResponse.state !== ResponseStateType.SUCCESS) {
+      throw new CommandFailedError(`Set user income command failed unexpectedly: ${JSON.stringify(wrappedResponse)}`)
     }
-    throw new CommandFailedError(`User active state set command failed unexpectedly: ${JSON.stringify(wrappedResponse)}`)
   }
 }
