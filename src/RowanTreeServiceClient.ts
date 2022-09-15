@@ -9,12 +9,17 @@ import { UserActiveSetRequest } from './types/UserActiveSetRequest'
 import { StoreType } from './types/StoreType'
 import { UserIncomeSetRequest } from './types/UserIncomeSetRequest'
 import { UserIncomeSetCommand } from './commands/UserIncomeSetCommand'
+import { FeatureType } from './types/FeatureType'
+import { UserTransportRequest } from './types/UserTransportRequest'
+import { UserTransportCommand } from './commands/UserTransportCommand'
+import { FeatureDetailsType } from './types/FeatureDetailsType'
 
 export class RowanTreeServiceClient {
   readonly #userCreateCommand: UserCreateCommand
   readonly #userDeleteCommand: UserDeleteCommand
   readonly #userActiveSetCommand: UserActiveSetCommand
   readonly #userIncomeSetCommand: UserIncomeSetCommand
+  readonly #userTransportCommand: UserTransportCommand
 
   public constructor (authClient?: RowanTreeAuthServiceClient, retryOptions?: RetryOptions) {
     authClient = (authClient != null) ? authClient : new RowanTreeAuthServiceClient(retryOptions)
@@ -23,6 +28,7 @@ export class RowanTreeServiceClient {
     this.#userDeleteCommand = new UserDeleteCommand(authClient, retryOptions)
     this.#userActiveSetCommand = new UserActiveSetCommand(authClient, retryOptions)
     this.#userIncomeSetCommand = new UserIncomeSetCommand(authClient, retryOptions)
+    this.#userTransportCommand = new UserTransportCommand(authClient, retryOptions)
   }
 
   public async userCreate (userGuid?: string): Promise<UserWorld> {
@@ -41,5 +47,10 @@ export class RowanTreeServiceClient {
   public async userIncomeSet (incomeSourceName: StoreType, amount: number, userGuid?: string): Promise<void> {
     const request: UserIncomeSetRequest = { incomeSourceName, amount, userGuid }
     await this.#userIncomeSetCommand.execute(request)
+  }
+
+  public async userTransport (location: FeatureType, userGuild?: string): Promise<FeatureDetailsType> {
+    const request: UserTransportRequest = { location, userGuid: userGuild }
+    return await this.#userTransportCommand.execute(request)
   }
 }

@@ -5,6 +5,9 @@ import { RowanTreeServiceClient } from '../../src/RowanTreeServiceClient'
 import { RetryOptions, RowanTreeAuthServiceClient } from 'rowantree.auth.typescript.sdk'
 import { UserWorld } from '../../src/types/UserWorld'
 import { StoreType } from '../../src/types/StoreType'
+import { FeatureType } from '../../src/types/FeatureType'
+import { FeatureDetailsType } from '../../src/types/FeatureDetailsType'
+
 config({ path: 'env/.env.offline' })
 
 describe('Service Client Tests', function (): void {
@@ -39,6 +42,15 @@ describe('Service Client Tests', function (): void {
     describe('userIncomeSet', function () {
       it('should set user income a user', async function (): Promise<void> {
         await client.userIncomeSet(StoreType.FUR, 1)
+      })
+    })
+  })
+
+  describe('User Tranport Command Tests', function () {
+    describe('userTransport', function () {
+      it('should transport user', async function (): Promise<void> {
+        const response: FeatureDetailsType = await client.userTransport(FeatureType.ROOM)
+        console.log(response)
       })
     })
   })
