@@ -15,6 +15,8 @@ import { UserTransportCommand } from './commands/UserTransportCommand'
 import { FeatureDetailsType } from './types/FeatureDetailsType'
 import { UserState } from './types/UserState'
 import { UserStateGetCommand } from './commands/UserStateGetCommand'
+import { MerchantTransformCommand } from './commands/MerchantTransformCommand'
+import { MerchantTransformRequest } from './types/MerchantTransformRequest'
 
 export class RowanTreeServiceClient {
   readonly #userCreateCommand: UserCreateCommand
@@ -23,6 +25,7 @@ export class RowanTreeServiceClient {
   readonly #userIncomeSetCommand: UserIncomeSetCommand
   readonly #userTransportCommand: UserTransportCommand
   readonly #userStateGetCommand: UserStateGetCommand
+  readonly #merchantTransformCommand: MerchantTransformCommand
 
   public constructor (authClient?: RowanTreeAuthServiceClient, retryOptions?: RetryOptions) {
     authClient = (authClient != null) ? authClient : new RowanTreeAuthServiceClient(retryOptions)
@@ -33,6 +36,7 @@ export class RowanTreeServiceClient {
     this.#userIncomeSetCommand = new UserIncomeSetCommand(authClient, retryOptions)
     this.#userTransportCommand = new UserTransportCommand(authClient, retryOptions)
     this.#userStateGetCommand = new UserStateGetCommand(authClient, retryOptions)
+    this.#merchantTransformCommand = new MerchantTransformCommand(authClient, retryOptions)
   }
 
   public async userCreate (userGuid?: string): Promise<UserWorld> {
@@ -53,12 +57,17 @@ export class RowanTreeServiceClient {
     await this.#userIncomeSetCommand.execute(request)
   }
 
-  public async userTransport (location: FeatureType, userGuild?: string): Promise<FeatureDetailsType> {
-    const request: UserTransportRequest = { location, userGuid: userGuild }
+  public async userTransport (location: FeatureType, userGuid?: string): Promise<FeatureDetailsType> {
+    const request: UserTransportRequest = { location, userGuid }
     return await this.#userTransportCommand.execute(request)
   }
 
-  public async userStateGet (userGuild?: string): Promise<UserState> {
-    return await this.#userStateGetCommand.execute(userGuild)
+  public async userStateGet (userGuid?: string): Promise<UserState> {
+    return await this.#userStateGetCommand.execute(userGuid)
+  }
+
+  public async merchantTransform (storeName: StoreType, userGuid?: string): Promise<void> {
+    const request: MerchantTransformRequest = { storeName, userGuid }
+    await this.#merchantTransformCommand.execute(request)
   }
 }
