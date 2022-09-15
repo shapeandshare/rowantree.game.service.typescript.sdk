@@ -27,7 +27,7 @@ export class UserDeleteCommand extends AbstractCommand<void, void> {
       verb: RequestVerbType.DELETE
     }
     const wrappedResponse: WrappedResponse<void> = await this.invokeRequest(wrappedRequest)
-    if (wrappedResponse.state === ResponseStateType.SUCCESS && (wrappedResponse?.status) === undefined) {
+    if (wrappedResponse.state !== ResponseStateType.SUCCESS) {
       throw new CommandFailedError(`Delete user command failed unexpectedly: ${JSON.stringify(wrappedResponse)}`)
     }
   }

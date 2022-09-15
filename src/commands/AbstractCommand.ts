@@ -138,6 +138,7 @@ export abstract class AbstractCommand<TRequestDataType, TResponseDataType> {
         return await this.invokeRequest(wrappedRequest, retryOptions, wrappedResponse)
       } else {
         console.log(`Not retrying after receiving status code (${error.response?.status}).`)
+        wrappedResponse.state = ResponseStateType.FAILURE
         return wrappedResponse
       }
     } else {
