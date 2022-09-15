@@ -6,6 +6,7 @@ import { CommandFailedError } from '../errors/CommandFailedError'
 import { RequestVerbType } from '../types/RequestVerbType'
 import { demandEnvVar, demandEnvVarAsNumber } from '../common/utils/EnvironmentUtills'
 import { getClaims, getHeaders } from '../common/utils/AuthContext'
+import { ResponseStateType } from '../types/ResponseStateType'
 
 export class UserCreateCommand extends AbstractCommand<void, UserType> {
   public async execute (userGuid?: string): Promise<UserType> {
@@ -26,7 +27,7 @@ export class UserCreateCommand extends AbstractCommand<void, UserType> {
       verb: RequestVerbType.POST
     }
     const wrappedResponse: WrappedResponse<UserType> = await this.invokeRequest(wrappedRequest)
-    if ((wrappedResponse?.data) !== undefined) {
+    if (wrappedResponse.state === ResponseStateType.SUCCESS && (wrappedResponse?.data) !== undefined) {
       return wrappedResponse?.data
     }
     throw new CommandFailedError(`Create user command failed unexpectedly: ${JSON.stringify(wrappedResponse)}`)

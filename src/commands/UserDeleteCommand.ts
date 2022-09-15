@@ -5,6 +5,7 @@ import { CommandFailedError } from '../errors/CommandFailedError'
 import { RequestVerbType } from '../types/RequestVerbType'
 import { demandEnvVar, demandEnvVarAsNumber } from '../common/utils/EnvironmentUtills'
 import { getClaims, getHeaders } from '../common/utils/AuthContext'
+import { ResponseStateType } from '../types/ResponseStateType'
 
 export class UserDeleteCommand extends AbstractCommand<void, void> {
   public async execute (userGuid?: string): Promise<void> {
@@ -26,7 +27,7 @@ export class UserDeleteCommand extends AbstractCommand<void, void> {
       verb: RequestVerbType.DELETE
     }
     const wrappedResponse: WrappedResponse<void> = await this.invokeRequest(wrappedRequest)
-    if ((wrappedResponse?.status) === undefined) {
+    if (wrappedResponse.state === ResponseStateType.SUCCESS && (wrappedResponse?.status) === undefined) {
       throw new CommandFailedError(`Delete user command failed unexpectedly: ${JSON.stringify(wrappedResponse)}`)
     }
   }

@@ -6,6 +6,7 @@ import { demandEnvVar, demandEnvVarAsNumber } from '../common/utils/EnvironmentU
 import { RequestVerbType } from '../types/RequestVerbType'
 import { UserActiveGetStatusType } from '../types/UserActiveGetStatusType'
 import { WrappedResponse } from '../types/WrappedResponse'
+import { ResponseStateType } from '../types/ResponseStateType'
 
 export class UserActiveSetCommand extends AbstractCommand<UserActiveGetStatusType, UserActiveGetStatusType> {
   public async execute (active: boolean, userGuid?: string): Promise<UserActiveGetStatusType> {
@@ -28,7 +29,7 @@ export class UserActiveSetCommand extends AbstractCommand<UserActiveGetStatusTyp
       data: request
     }
     const wrappedResponse: WrappedResponse<UserActiveGetStatusType> = await this.invokeRequest(wrappedRequest)
-    if ((wrappedResponse?.data) !== undefined) {
+    if (wrappedResponse.state === ResponseStateType.SUCCESS && ((wrappedResponse?.data) !== undefined)) {
       return wrappedResponse?.data
     }
     throw new CommandFailedError(`User active state set command failed unexpectedly: ${JSON.stringify(wrappedResponse)}`)

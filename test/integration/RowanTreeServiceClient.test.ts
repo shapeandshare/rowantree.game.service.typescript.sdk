@@ -14,7 +14,7 @@ describe('Service Client Tests', function (): void {
   before(async function (): Promise<void> {})
   after(async function (): Promise<void> {})
 
-  describe('Create User Command Tests', function () {
+  describe.skip('Create User Command Tests', function () {
     describe('userCreate', function () {
       it('should create a user', async function (): Promise<void> {
         const user: UserType = await client.userCreate()
@@ -24,14 +24,39 @@ describe('Service Client Tests', function (): void {
   })
 
   describe('Set User Active Command Tests', function () {
+    async function delay (seconds: number): Promise<void> {
+      return await new Promise(resolve => setTimeout(resolve, seconds * 1000))
+    }
+
     describe('userActiveSet', function () {
       it('should set a user active', async function (): Promise<void> {
-        await client.userActiveSet()
+        await client.userActiveSet(true)
+      })
+      it('should set a user inactive', async function (): Promise<void> {
+        await client.userActiveSet(false)
+      })
+      it('should set a user inactive', async function (): Promise<void> {
+        await client.userActiveSet(true, 'asd')
+        await delay(1)
+        await client.userActiveSet(true)
+        await delay(1)
+        await client.userActiveSet(true)
+        await delay(1)
+        // await client.userActiveSet(true)
+        // await client.userActiveSet(true)
+        // await client.userActiveSet(true)
+        // await client.userActiveSet(true)
+        // await client.userActiveSet(true)
+        // await client.userActiveSet(true)
+        // await client.userActiveSet(true)
+        // await client.userActiveSet(true)
+        // await client.userActiveSet(true)
+        // await client.userActiveSet(true)
       })
     })
   })
 
-  describe('Delete User Command Tests', function () {
+  describe.skip('Delete User Command Tests', function () {
     describe('userDelete', function () {
       it('should delete a user', async function (): Promise<void> {
         await client.userDelete()
