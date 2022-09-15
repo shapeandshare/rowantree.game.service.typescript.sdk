@@ -4,8 +4,8 @@ export interface UserState {
   stores: Record<any, any>
   incomes: Record<any, any>
   features: Set<any>
-  active_feature: any
-  active_feature_state: any
+  activeFeature: any
+  activeFeatureState: any
   population: number
   merchants: Set<any>
   notifications: any[]
