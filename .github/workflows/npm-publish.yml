@@ -18,17 +18,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Node
-      uses: actions/setup-node@v3
-      with:
-        node-version: '14'
-        registry-url: https://registry.npmjs.org/
-    - name: Install dependencies
-      run: |
-        npm ci
-    - name: Build package
-      run: npm run pack
-    - uses: JS-DevTools/npm-publish@v1
-      with:
-        token: ${{secrets.NPM_API_TOKEN}}
+      - uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+          registry-url: https://registry.npmjs.org/
+      - name: Install dependencies
+        run: |
+          npm ci
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_API_TOKEN }}
+      - name: Build package
+        run: |
+          npm run pack
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_API_TOKEN }}
+      - name: Publish package
+        run:  |
+          npm publish ./rowantree.service.typescript.sdk-*.tgz
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_API_TOKEN }}
