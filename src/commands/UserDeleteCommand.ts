@@ -3,8 +3,8 @@ import { WrappedRequest } from '../types/WrappedRequest'
 import { WrappedResponse } from '../types/WrappedResponse'
 import { CommandFailedError } from '../errors/CommandFailedError'
 import { RequestVerbType } from '../types/RequestVerbType'
-import { demandEnvVar, demandEnvVarAsNumber } from '../common/utils/EnvironmentUtills'
-import { getClaims, getHeaders } from '../common/utils/AuthContext'
+import { demandEnvVar, demandEnvVarAsNumber } from '../common/EnvironmentUtils'
+import { getClaims, getHeaders } from '../common/AuthContext'
 import { ResponseStateType } from '../types/ResponseStateType'
 
 export class UserDeleteCommand extends AbstractCommand<void, void> {

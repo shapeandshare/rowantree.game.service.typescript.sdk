@@ -7,7 +7,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosRequestHeaders, AxiosRespon
 import FormData from 'form-data'
 import { WrappedResponse } from '../types/WrappedResponse'
 import { demandEnvVar, RowanTreeAuthServiceClient, Token, TokenClaims } from 'rowantree.auth.typescript.sdk'
-import { getHeaders, setClaims, setHeader } from '../common/utils/AuthContext'
+import { getHeaders, setClaims, setHeader } from '../common/AuthContext'
 import { ResponseStateType } from '../types/ResponseStateType'
 
 // https://github.com/axios/axios/issues/3612
