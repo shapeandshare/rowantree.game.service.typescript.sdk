@@ -4,7 +4,6 @@ import { WrappedResponse } from '../types/WrappedResponse'
 import { UserWorld } from '../types/UserWorld'
 import { CommandFailedError } from '../errors/CommandFailedError'
 import { RequestVerbType } from '../types/RequestVerbType'
-import { demandEnvVar, demandEnvVarAsNumber } from '../common/EnvironmentUtils'
 import { getClaims, getHeaders } from '../common/AuthContext'
 import { ResponseStateType } from '../types/ResponseStateType'
 
@@ -23,8 +22,8 @@ export class UserCreateCommand extends AbstractCommand<void, UserWorld> {
 
     const wrappedRequest: WrappedRequest<void> = {
       statuses: { allow: [201], retry: [], reauth: [401] },
-      timeout: demandEnvVarAsNumber('ROWANTREE_SERVICE_TIMEOUT'),
-      url: `${demandEnvVar('ROWANTREE_SERVICE_ENDPOINT')}/v1/user/${userGuid}`,
+      timeout: this.options.timeout,
+      url: `${this.options.endpoint}/v1/user/${userGuid}`,
       verb: RequestVerbType.POST
     }
     const wrappedResponse: WrappedResponse<UserWorld> = await this.invokeRequest(wrappedRequest)

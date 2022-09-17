@@ -3,7 +3,6 @@ import { WrappedRequest } from '../types/WrappedRequest'
 import { WrappedResponse } from '../types/WrappedResponse'
 import { CommandFailedError } from '../errors/CommandFailedError'
 import { RequestVerbType } from '../types/RequestVerbType'
-import { demandEnvVar, demandEnvVarAsNumber } from '../common/EnvironmentUtils'
 import { getClaims, getHeaders } from '../common/AuthContext'
 import { ResponseStateType } from '../types/ResponseStateType'
 
@@ -22,8 +21,8 @@ export class UserDeleteCommand extends AbstractCommand<void, void> {
 
     const wrappedRequest: WrappedRequest<void> = {
       statuses: { allow: [200], retry: [], reauth: [401] },
-      timeout: demandEnvVarAsNumber('ROWANTREE_SERVICE_TIMEOUT'),
-      url: `${demandEnvVar('ROWANTREE_SERVICE_ENDPOINT')}/v1/user/${userGuid}`,
+      timeout: this.options.timeout,
+      url: `${this.options.endpoint}/v1/user/${userGuid}`,
       verb: RequestVerbType.DELETE
     }
     const wrappedResponse: WrappedResponse<void> = await this.invokeRequest(wrappedRequest)

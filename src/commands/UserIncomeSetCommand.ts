@@ -3,7 +3,6 @@ import { UserIncomeSetRequest } from '../types/UserIncomeSetRequest'
 import { getClaims, getHeaders } from '../common/AuthContext'
 import { CommandFailedError } from '../errors/CommandFailedError'
 import { WrappedRequest } from '../types/WrappedRequest'
-import { demandEnvVar, demandEnvVarAsNumber } from '../common/EnvironmentUtils'
 import { RequestVerbType } from '../types/RequestVerbType'
 import { WrappedResponse } from '../types/WrappedResponse'
 import { ResponseStateType } from '../types/ResponseStateType'
@@ -23,8 +22,8 @@ export class UserIncomeSetCommand extends AbstractCommand<UserIncomeSetRequest, 
 
     const wrappedRequest: WrappedRequest<Omit<UserIncomeSetRequest, 'userGuid'>> = {
       statuses: { allow: [200], retry: [], reauth: [401] },
-      timeout: demandEnvVarAsNumber('ROWANTREE_SERVICE_TIMEOUT'),
-      url: `${demandEnvVar('ROWANTREE_SERVICE_ENDPOINT')}/v1/user/${request.userGuid}/income`,
+      timeout: this.options.timeout,
+      url: `${this.options.endpoint}/v1/user/${request.userGuid}/income`,
       verb: RequestVerbType.POST,
       data: { incomeSourceName: request.incomeSourceName, amount: request.amount }
     }

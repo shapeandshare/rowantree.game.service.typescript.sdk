@@ -1,4 +1,4 @@
-import { RetryOptions } from '../types/RetryOptions'
+import { CommandOptions } from '../types/CommandOptions'
 import { WrappedRequest } from '../types/WrappedRequest'
 import { RequestVerbType } from '../types/RequestVerbType'
 import { UnknownRequestVerb } from '../errors/UnknownRequestVerb'
@@ -9,6 +9,7 @@ import { WrappedResponse } from '../types/WrappedResponse'
 import { demandEnvVar, RowanTreeAuthServiceClient, Token, TokenClaims } from 'rowantree.auth.typescript.sdk'
 import { getHeaders, setClaims, setHeader } from '../common/AuthContext'
 import { ResponseStateType } from '../types/ResponseStateType'
+import { demandEnvVarAsNumber } from '../common/EnvironmentUtils'
 
 // https://github.com/axios/axios/issues/3612
 export function isAxiosError (error: unknown): error is AxiosError {
@@ -16,16 +17,31 @@ export function isAxiosError (error: unknown): error is AxiosError {
 }
 
 export abstract class AbstractCommand<TRequestDataType, TResponseDataType> {
-  public readonly retryOptions: RetryOptions
+  public readonly options: CommandOptions
   readonly #authClient: RowanTreeAuthServiceClient
+  readonly #browserMode: boolean
 
-  public constructor (authClient: RowanTreeAuthServiceClient, retryOptions?: RetryOptions) {
-    this.retryOptions = (retryOptions != null) ? retryOptions : { sleepTime: 1, retryCount: 5 }
+  public constructor (authClient: RowanTreeAuthServiceClient, options?: CommandOptions, browser: boolean = false) {
+    this.options = (options != null)
+      ? options
+      : {
+          sleepTime: demandEnvVarAsNumber('ROWANTREE_SERVICE_SLEEP'),
+          retryCount: demandEnvVarAsNumber('ROWANTREE_SERVICE_RETRY'),
+          endpoint: demandEnvVar('ROWANTREE_SERVICE_ENDPOINT'),
+          timeout: demandEnvVarAsNumber('ROWANTREE_SERVICE_TIMEOUT')
+        }
     this.#authClient = authClient
+    this.#browserMode = browser
   }
 
   protected async auth (): Promise<void> {
-    const token: Token = await this.#authClient.authUser(demandEnvVar('ACCESS_USERNAME'), demandEnvVar('ACCESS_PASSWORD'))
+    if (!this.#browserMode) {
+      const token: Token = await this.#authClient.authUser(demandEnvVar('ACCESS_USERNAME'), demandEnvVar('ACCESS_PASSWORD'))
+      this.setCredentials(token)
+    }
+  }
+
+  public setCredentials (token: Token): void {
     const claims: TokenClaims = this.#authClient.decodeJwt(token.accessToken)
     console.log(claims)
     setHeader('Authorization', `Bearer ${token.accessToken}`)
@@ -46,13 +62,13 @@ export abstract class AbstractCommand<TRequestDataType, TResponseDataType> {
     return config
   }
 
-  protected async invokeRequest (wrappedRequest: WrappedRequest<TRequestDataType>, retryOptions?: RetryOptions, wrappedResponse?: WrappedResponse<TResponseDataType>): Promise<WrappedResponse<TResponseDataType>> {
+  protected async invokeRequest (wrappedRequest: WrappedRequest<TRequestDataType>, retryOptions?: CommandOptions, wrappedResponse?: WrappedResponse<TResponseDataType>): Promise<WrappedResponse<TResponseDataType>> {
     let response: AxiosResponse
 
     wrappedResponse = (wrappedResponse != null) ? wrappedResponse : { state: ResponseStateType.UNKNOWN }
 
     // Use the passed in options, otherwise go to the defaults.
-    retryOptions = (retryOptions != null) ? retryOptions : { ...this.retryOptions }
+    retryOptions = (retryOptions != null) ? retryOptions : { ...this.options }
 
     if (retryOptions.retryCount < 1) {
       // We've exceeded our retries, we will return an empty wrapped response.  The command can decide how to handle this scenario.
@@ -115,7 +131,7 @@ export abstract class AbstractCommand<TRequestDataType, TResponseDataType> {
     }
   }
 
-  private async handleAxiosError (error: AxiosError, wrappedResponse: WrappedResponse<TResponseDataType>, wrappedRequest: WrappedRequest<TRequestDataType>, retryOptions: RetryOptions): Promise<WrappedResponse<TResponseDataType>> {
+  private async handleAxiosError (error: AxiosError, wrappedResponse: WrappedResponse<TResponseDataType>, wrappedRequest: WrappedRequest<TRequestDataType>, retryOptions: CommandOptions): Promise<WrappedResponse<TResponseDataType>> {
     wrappedResponse.status = error.response?.status
     wrappedResponse.code = error.code
 
