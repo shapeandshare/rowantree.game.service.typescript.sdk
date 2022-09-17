@@ -41,6 +41,7 @@ export { UserTransportRequest } from './types/UserTransportRequest'
 export { UserWorld } from './types/UserWorld'
 export { WrappedRequest } from './types/WrappedRequest'
 export { WrappedResponse } from './types/WrappedResponse'
+export { UserFeatureState } from './types/UserFeatureState'
 
 /** Client */
 export { RowanTreeServiceClient } from './RowanTreeServiceClient'
