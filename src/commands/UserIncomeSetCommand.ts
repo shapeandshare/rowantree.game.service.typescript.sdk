@@ -21,7 +21,7 @@ export class UserIncomeSetCommand extends AbstractCommand<UserIncomeSetRequest, 
     }
 
     const wrappedRequest: WrappedRequest<Omit<UserIncomeSetRequest, 'userGuid'>> = {
-      statuses: { allow: [200], retry: [], reauth: [401] },
+      statuses: { allow: [200], retry: [0], reauth: [401] },
       timeout: this.options.timeout,
       url: `${this.options.endpoint}/v1/user/${request.userGuid}/income`,
       verb: RequestVerbType.POST,

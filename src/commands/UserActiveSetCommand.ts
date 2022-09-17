@@ -21,7 +21,7 @@ export class UserActiveSetCommand extends AbstractCommand<UserActiveStatus, User
     }
 
     const wrappedRequest: WrappedRequest<UserActiveStatus> = {
-      statuses: { allow: [200], retry: [], reauth: [401] },
+      statuses: { allow: [200], retry: [0], reauth: [401] },
       timeout: this.options.timeout,
       url: `${this.options.endpoint}/v1/user/${request.userGuid}/active`,
       verb: RequestVerbType.POST,
