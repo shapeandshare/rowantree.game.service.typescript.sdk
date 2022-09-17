@@ -72,7 +72,7 @@ export abstract class AbstractCommand<TRequestDataType, TResponseDataType> {
 
     if (retryOptions.retryCount < 1) {
       // We've exceeded our retries, we will return an empty wrapped response.  The command can decide how to handle this scenario.
-      console.log('max retried reached')
+      console.log('Maximum retried reached')
       wrappedResponse.state = ResponseStateType.MAX_RETRIES
       return wrappedResponse
     }
@@ -95,7 +95,6 @@ export abstract class AbstractCommand<TRequestDataType, TResponseDataType> {
       wrappedResponse.data = response.data
       wrappedResponse.status = response.status
       wrappedResponse.state = ResponseStateType.SUCCESS
-      console.log('Call completed successfully')
       return wrappedResponse
     }
 
@@ -140,7 +139,6 @@ export abstract class AbstractCommand<TRequestDataType, TResponseDataType> {
         // Review success cases (Which might be exception inducing, 4xx, etc)
         // The payload could be anything, probable error details.
         wrappedResponse.state = ResponseStateType.SUCCESS
-        console.log('Successfully failed')
         return wrappedResponse
       } else if (wrappedRequest.statuses.retry.includes(error.response?.status)) {
         // Review failure cases

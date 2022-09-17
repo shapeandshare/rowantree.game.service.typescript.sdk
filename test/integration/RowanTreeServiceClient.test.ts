@@ -2,7 +2,7 @@ import { describe } from 'mocha'
 
 import { config } from 'dotenv'
 import { RowanTreeServiceClient } from '../../src/RowanTreeServiceClient'
-import { RetryOptions, RowanTreeAuthServiceClient } from 'rowantree.auth.typescript.sdk'
+import { RowanTreeAuthServiceClient } from 'rowantree.auth.typescript.sdk'
 import { UserWorld } from '../../src/types/UserWorld'
 import { StoreType } from '../../src/types/StoreType'
 import { FeatureType } from '../../src/types/FeatureType'
@@ -12,9 +12,8 @@ import { UserState } from '../../src/types/UserState'
 config({ path: 'env/.env.offline' })
 
 describe('Service Client Tests', function (): void {
-  const retryOptions: RetryOptions = { sleepTime: 2, retryCount: 5 }
-  const authClient: RowanTreeAuthServiceClient = new RowanTreeAuthServiceClient(retryOptions)
-  const client: RowanTreeServiceClient = new RowanTreeServiceClient(authClient, retryOptions)
+  const authClient: RowanTreeAuthServiceClient = new RowanTreeAuthServiceClient()
+  const client: RowanTreeServiceClient = new RowanTreeServiceClient(authClient)
 
   before(async function (): Promise<void> {})
   after(async function (): Promise<void> {})
