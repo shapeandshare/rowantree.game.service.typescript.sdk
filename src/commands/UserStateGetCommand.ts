@@ -3,7 +3,6 @@ import { UserState } from '../types/UserState'
 import { getClaims, getHeaders } from '../common/AuthContext'
 import { CommandFailedError } from '../errors/CommandFailedError'
 import { WrappedRequest } from '../types/WrappedRequest'
-import { demandEnvVar, demandEnvVarAsNumber } from '../common/EnvironmentUtils'
 import { RequestVerbType } from '../types/RequestVerbType'
 import { WrappedResponse } from '../types/WrappedResponse'
 import { ResponseStateType } from '../types/ResponseStateType'
@@ -22,8 +21,8 @@ export class UserStateGetCommand extends AbstractCommand<any, any> {
 
     const wrappedRequest: WrappedRequest<void> = {
       statuses: { allow: [200], retry: [], reauth: [401] },
-      timeout: demandEnvVarAsNumber('ROWANTREE_SERVICE_TIMEOUT'),
-      url: `${demandEnvVar('ROWANTREE_SERVICE_ENDPOINT')}/v1/user/${userGuid}/state`,
+      timeout: this.options.timeout,
+      url: `${this.options.endpoint}/v1/user/${userGuid}/state`,
       verb: RequestVerbType.GET
     }
     const wrappedResponse: WrappedResponse<UserState> = await this.invokeRequest(wrappedRequest)

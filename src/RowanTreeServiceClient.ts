@@ -1,5 +1,5 @@
-import { RetryOptions } from './types/RetryOptions'
-import { RowanTreeAuthServiceClient } from 'rowantree.auth.typescript.sdk'
+import { CommandOptions } from './types/CommandOptions'
+import { RowanTreeAuthServiceClient, Token } from 'rowantree.auth.typescript.sdk'
 import { UserCreateCommand } from './commands/UserCreateCommand'
 import { UserWorld } from './types/UserWorld'
 import { UserDeleteCommand } from './commands/UserDeleteCommand'
@@ -27,16 +27,14 @@ export class RowanTreeServiceClient {
   readonly #userStateGetCommand: UserStateGetCommand
   readonly #merchantTransformCommand: MerchantTransformCommand
 
-  public constructor (authClient?: RowanTreeAuthServiceClient, retryOptions?: RetryOptions) {
-    authClient = (authClient != null) ? authClient : new RowanTreeAuthServiceClient(retryOptions)
-
-    this.#userCreateCommand = new UserCreateCommand(authClient, retryOptions)
-    this.#userDeleteCommand = new UserDeleteCommand(authClient, retryOptions)
-    this.#userActiveSetCommand = new UserActiveSetCommand(authClient, retryOptions)
-    this.#userIncomeSetCommand = new UserIncomeSetCommand(authClient, retryOptions)
-    this.#userTransportCommand = new UserTransportCommand(authClient, retryOptions)
-    this.#userStateGetCommand = new UserStateGetCommand(authClient, retryOptions)
-    this.#merchantTransformCommand = new MerchantTransformCommand(authClient, retryOptions)
+  public constructor (authClient: RowanTreeAuthServiceClient, options?: CommandOptions, browser: boolean = false) {
+    this.#userCreateCommand = new UserCreateCommand(authClient, options, browser)
+    this.#userDeleteCommand = new UserDeleteCommand(authClient, options, browser)
+    this.#userActiveSetCommand = new UserActiveSetCommand(authClient, options, browser)
+    this.#userIncomeSetCommand = new UserIncomeSetCommand(authClient, options, browser)
+    this.#userTransportCommand = new UserTransportCommand(authClient, options, browser)
+    this.#userStateGetCommand = new UserStateGetCommand(authClient, options, browser)
+    this.#merchantTransformCommand = new MerchantTransformCommand(authClient, options, browser)
   }
 
   public async userCreate (userGuid?: string): Promise<UserWorld> {
@@ -69,5 +67,10 @@ export class RowanTreeServiceClient {
   public async merchantTransform (storeName: StoreType, userGuid?: string): Promise<void> {
     const request: MerchantTransformRequest = { storeName, userGuid }
     await this.#merchantTransformCommand.execute(request)
+  }
+
+  public setCredentials (token: Token): void {
+    // All commands share the credentials so it only needs to be set on one (any of them)
+    this.#userCreateCommand.setCredentials(token)
   }
 }

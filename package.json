@@ -1,6 +1,6 @@
 {
   "name": "rowantree.service.typescript.sdk",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "The Rowan Tree Service [TypeScript] SDK",
   "repository": {
     "type": "git",
@@ -56,6 +56,6 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
-    "rowantree.auth.typescript.sdk": "^0.13.0"
+    "rowantree.auth.typescript.sdk": "^0.14.0"
   }
 }

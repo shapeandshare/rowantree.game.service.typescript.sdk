@@ -2,7 +2,6 @@ import { AbstractCommand } from './AbstractCommand'
 import { getClaims, getHeaders } from '../common/AuthContext'
 import { CommandFailedError } from '../errors/CommandFailedError'
 import { WrappedRequest } from '../types/WrappedRequest'
-import { demandEnvVar, demandEnvVarAsNumber } from '../common/EnvironmentUtils'
 import { RequestVerbType } from '../types/RequestVerbType'
 import { UserActiveStatus } from '../types/UserActiveStatus'
 import { WrappedResponse } from '../types/WrappedResponse'
@@ -23,8 +22,8 @@ export class UserActiveSetCommand extends AbstractCommand<UserActiveStatus, User
 
     const wrappedRequest: WrappedRequest<UserActiveStatus> = {
       statuses: { allow: [200], retry: [], reauth: [401] },
-      timeout: demandEnvVarAsNumber('ROWANTREE_SERVICE_TIMEOUT'),
-      url: `${demandEnvVar('ROWANTREE_SERVICE_ENDPOINT')}/v1/user/${request.userGuid}/active`,
+      timeout: this.options.timeout,
+      url: `${this.options.endpoint}/v1/user/${request.userGuid}/active`,
       verb: RequestVerbType.POST,
       data: request
     }
