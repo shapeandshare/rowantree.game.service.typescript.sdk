@@ -34,18 +34,18 @@ export abstract class AbstractCommand<TRequestDataType, TResponseDataType> {
     this.#browserMode = browser
   }
 
-  protected async auth (): Promise<void> {
-    if (!this.#browserMode) {
-      const token: Token = await this.#authClient.authUser(demandEnvVar('ACCESS_USERNAME'), demandEnvVar('ACCESS_PASSWORD'))
-      this.setCredentials(token)
-    }
-  }
-
   public setCredentials (token: Token): void {
     const claims: TokenClaims = this.#authClient.decodeJwt(token.accessToken)
     console.log(claims)
     setHeader('Authorization', `Bearer ${token.accessToken}`)
     setClaims(claims)
+  }
+
+  protected async auth (): Promise<void> {
+    if (!this.#browserMode) {
+      const token: Token = await this.#authClient.authUser(demandEnvVar('ACCESS_USERNAME'), demandEnvVar('ACCESS_PASSWORD'))
+      this.setCredentials(token)
+    }
   }
 
   protected async buildConfig (wrappedRequest: WrappedRequest<TRequestDataType>): Promise<AxiosRequestConfig> {

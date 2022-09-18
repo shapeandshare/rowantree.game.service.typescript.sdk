@@ -3,7 +3,6 @@
  **/
 
 /** Commands */
-export { AbstractCommand } from './commands/AbstractCommand'
 export { MerchantTransformCommand } from './commands/MerchantTransformCommand'
 export { UserActiveSetCommand } from './commands/UserActiveSetCommand'
 export { UserCreateCommand } from './commands/UserCreateCommand'
@@ -42,6 +41,8 @@ export { UserWorld } from './types/UserWorld'
 export { WrappedRequest } from './types/WrappedRequest'
 export { WrappedResponse } from './types/WrappedResponse'
 export { UserFeatureState } from './types/UserFeatureState'
+export { IncomeSourceType } from './types/IncomeSourceType'
+export { UserIncome } from './types/UserIncome'
 
 /** Client */
 export { RowanTreeServiceClient } from './RowanTreeServiceClient'

@@ -1,2 +1,2 @@
-
-export class UnknownRequestVerb extends Error {}
+export class UnknownRequestVerb extends Error {
+}

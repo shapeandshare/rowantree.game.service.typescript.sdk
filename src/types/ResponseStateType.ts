@@ -1,4 +1,3 @@
-
 export enum ResponseStateType {
   SUCCESS = 'SUCCESS',
   FAILURE = 'FAILURE',
