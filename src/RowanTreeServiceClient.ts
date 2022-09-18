@@ -17,6 +17,7 @@ import { UserState } from './types/UserState'
 import { UserStateGetCommand } from './commands/UserStateGetCommand'
 import { MerchantTransformCommand } from './commands/MerchantTransformCommand'
 import { MerchantTransformRequest } from './types/MerchantTransformRequest'
+import { IncomeSourceType } from './types/IncomeSourceType'
 
 export class RowanTreeServiceClient {
   readonly #userCreateCommand: UserCreateCommand
@@ -50,7 +51,7 @@ export class RowanTreeServiceClient {
     return await this.#userActiveSetCommand.execute(request)
   }
 
-  public async userIncomeSet (incomeSourceName: StoreType, amount: number, userGuid?: string): Promise<void> {
+  public async userIncomeSet (incomeSourceName: IncomeSourceType, amount: number, userGuid?: string): Promise<void> {
     const request: UserIncomeSetRequest = { incomeSourceName, amount, userGuid }
     await this.#userIncomeSetCommand.execute(request)
   }
