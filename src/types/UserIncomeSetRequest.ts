@@ -1,7 +1,7 @@
-import { StoreType } from './StoreType'
+import { IncomeSourceType } from './IncomeSourceType'
 
 export interface UserIncomeSetRequest {
-  incomeSourceName: StoreType
+  incomeSourceName: IncomeSourceType
   amount: number
   userGuid?: string
 }
