@@ -1,2 +1,2 @@
-
-export class CommandFailedError extends Error {}
+export class CommandFailedError extends Error {
+}

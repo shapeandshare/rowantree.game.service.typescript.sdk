@@ -1,4 +1,3 @@
-
 export function demandEnvVar (name: string): string {
   const value: string | undefined = process.env[name]
   if (value !== undefined) {

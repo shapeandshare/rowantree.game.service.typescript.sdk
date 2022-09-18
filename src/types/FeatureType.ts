@@ -1,4 +1,3 @@
-
 export enum FeatureType {
   ROOM = 'room',
   OUTSIDE = 'outside',

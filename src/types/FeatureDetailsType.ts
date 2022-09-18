@@ -1,4 +1,3 @@
-
 export enum FeatureDetailsType {
   SHADOWY_GROVE = 'A Shadowy Grove',
   ROWAN_TREE_LIT_BY_FIRELIGHT = 'A Rowan Tree Lit By Firelight',

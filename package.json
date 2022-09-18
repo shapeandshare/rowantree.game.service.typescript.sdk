@@ -1,6 +1,6 @@
 {
   "name": "rowantree.service.typescript.sdk",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "The Rowan Tree Service [TypeScript] SDK",
   "repository": {
     "type": "git",

@@ -1,4 +1,3 @@
-
 export enum StoreType {
   GRENADE = 'grenade',
   BAYONET = 'bayonet',

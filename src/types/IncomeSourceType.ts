@@ -1,4 +1,3 @@
-
 export enum IncomeSourceType {
   GATHERER = 'gatherer',
   HUNTER = 'hunter',
