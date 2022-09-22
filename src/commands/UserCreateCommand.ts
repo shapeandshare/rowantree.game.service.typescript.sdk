@@ -23,7 +23,7 @@ export class UserCreateCommand extends AbstractCommand<void, UserWorld> {
     const wrappedRequest: WrappedRequest<void> = {
       statuses: { allow: [201], retry: [0], reauth: [401] },
       timeout: this.options.timeout,
-      url: `${this.options.endpoint}/v1/user/${userGuid}`,
+      url: `https://api.${this.options.tld}/game/v1/user/${userGuid}`,
       verb: RequestVerbType.POST
     }
     const wrappedResponse: WrappedResponse<UserWorld> = await this.invokeRequest(wrappedRequest)

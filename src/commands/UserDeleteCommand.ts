@@ -22,7 +22,7 @@ export class UserDeleteCommand extends AbstractCommand<void, void> {
     const wrappedRequest: WrappedRequest<void> = {
       statuses: { allow: [200], retry: [0], reauth: [401] },
       timeout: this.options.timeout,
-      url: `${this.options.endpoint}/v1/user/${userGuid}`,
+      url: `https://api.${this.options.tld}/game/v1/user/${userGuid}`,
       verb: RequestVerbType.DELETE
     }
     const wrappedResponse: WrappedResponse<void> = await this.invokeRequest(wrappedRequest)

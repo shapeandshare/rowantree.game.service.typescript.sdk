@@ -1,6 +1,6 @@
 export interface CommandOptions {
   sleepTime: number
   retryCount: number
-  endpoint: string
+  tld: string
   timeout: number
 }

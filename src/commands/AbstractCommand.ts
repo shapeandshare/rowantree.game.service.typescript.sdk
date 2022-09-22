@@ -27,7 +27,7 @@ export abstract class AbstractCommand<TRequestDataType, TResponseDataType> {
       : {
           sleepTime: demandEnvVarAsNumber('ROWANTREE_SERVICE_SLEEP'),
           retryCount: demandEnvVarAsNumber('ROWANTREE_SERVICE_RETRY'),
-          endpoint: demandEnvVar('ROWANTREE_SERVICE_ENDPOINT'),
+          tld: demandEnvVar('ROWANTREE_TLD'),
           timeout: demandEnvVarAsNumber('ROWANTREE_SERVICE_TIMEOUT')
         }
     this.#authClient = authClient
