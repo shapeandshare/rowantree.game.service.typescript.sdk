@@ -23,7 +23,7 @@ export class MerchantTransformCommand extends AbstractCommand<MerchantTransformR
     const wrappedRequest: WrappedRequest<Omit<MerchantTransformRequest, 'userGuid'>> = {
       statuses: { allow: [201], retry: [0], reauth: [401] },
       timeout: this.options.timeout,
-      url: `${this.options.endpoint}/v1/user/${request.userGuid}/merchant`,
+      url: `https://api.${this.options.tld}/game/v1/user/${request.userGuid}/merchant`,
       verb: RequestVerbType.POST,
       data: { storeName: request.storeName }
     }

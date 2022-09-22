@@ -1,17 +1,17 @@
 {
-  "name": "rowantree.service.typescript.sdk",
-  "version": "0.9.0",
+  "name": "rowantree.game.service.typescript.sdk",
+  "version": "0.10.0",
   "description": "The Rowan Tree Service [TypeScript] SDK",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shapeandshare/rowantree.service.typescript.sdk.git"
+    "url": "git+https://github.com/shapeandshare/rowantree.game.service.typescript.sdk.git"
   },
   "author": "Joshua C. Burt",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/shapeandshare/rowantree.service.typescript.sdk/issues"
+    "url": "https://github.com/shapeandshare/rowantree.game.service.typescript.sdk/issues"
   },
-  "homepage": "https://github.com/shapeandshare/rowantree.service.typescript.sdk#readme",
+  "homepage": "https://github.com/shapeandshare/rowantree.game.service.typescript.sdk#readme",
   "scripts": {
     "audit": "npm audit --registry=https://registry.npmjs.org/",
     "audit:fix": "npm audit fix --registry=https://registry.npmjs.org/",
@@ -56,6 +56,6 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
-    "rowantree.auth.typescript.sdk": "^0.14.0"
+    "rowantree.auth.typescript.sdk": "^0.15.0"
   }
 }

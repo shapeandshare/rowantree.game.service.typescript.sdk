@@ -22,7 +22,7 @@ export class UserStateGetCommand extends AbstractCommand<any, any> {
     const wrappedRequest: WrappedRequest<void> = {
       statuses: { allow: [200], retry: [0], reauth: [401] },
       timeout: this.options.timeout,
-      url: `${this.options.endpoint}/v1/user/${userGuid}/state`,
+      url: `https://api.${this.options.tld}/game/v1/user/${userGuid}/state`,
       verb: RequestVerbType.GET
     }
     const wrappedResponse: WrappedResponse<UserState> = await this.invokeRequest(wrappedRequest)

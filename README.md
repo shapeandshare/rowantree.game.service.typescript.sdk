@@ -1,1 +1,1 @@
-# Rowan Tree Service [TypeScript] SDK
+# Rowan Tree Game Service [TypeScript] SDK

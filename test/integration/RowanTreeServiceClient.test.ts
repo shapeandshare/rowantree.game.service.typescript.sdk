@@ -38,13 +38,13 @@ describe('Service Client Tests', function (): void {
     })
   })
 
-  describe.skip('Set User Income Command Tests', function () {
-    describe('userIncomeSet', function () {
-      it('should set user income a user', async function (): Promise<void> {
-        await client.userIncomeSet(StoreType.FUR, 1)
-      })
-    })
-  })
+  // describe.skip('Set User Income Command Tests', function () {
+  //   describe('userIncomeSet', function () {
+  //     it('should set user income a user', async function (): Promise<void> {
+  //       await client.userIncomeSet(StoreType.FUR, 1)
+  //     })
+  //   })
+  // })
 
   describe.skip('User Transport Command Tests', function () {
     describe('userTransport', function () {
@@ -55,7 +55,7 @@ describe('Service Client Tests', function (): void {
     })
   })
 
-  describe('User State Get Command Tests', function () {
+  describe.skip('User State Get Command Tests', function () {
     describe('userStateGet', function () {
       it('should get user state', async function (): Promise<void> {
         const response: UserState = await client.userStateGet()
@@ -64,7 +64,7 @@ describe('Service Client Tests', function (): void {
     })
   })
 
-  describe('Merchant Transform Command Tests', function () {
+  describe.skip('Merchant Transform Command Tests', function () {
     describe('merchantTransform', function () {
       it('should perform merchant transform', async function (): Promise<void> {
         await client.merchantTransform(StoreType.FUR)
