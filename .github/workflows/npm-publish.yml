@@ -36,6 +36,6 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_API_TOKEN }}
       - name: Publish package
         run:  |
-          npm publish ./rowantree.service.typescript.sdk-*.tgz
+          npm publish ./rowantree.game.service.typescript.sdk-*.tgz
         env:
           NPM_TOKEN: ${{ secrets.NPM_API_TOKEN }}
