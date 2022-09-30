@@ -1,6 +1,6 @@
 {
   "name": "rowantree.game.service.typescript.sdk",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "The Rowan Tree Service [TypeScript] SDK",
   "repository": {
     "type": "git",
@@ -56,6 +56,6 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
-    "rowantree.auth.typescript.sdk": "^0.15.0"
+    "rowantree.auth.typescript.sdk": "^0.16.0"
   }
 }
