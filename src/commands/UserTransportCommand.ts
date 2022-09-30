@@ -22,7 +22,7 @@ export class UserTransportCommand extends AbstractCommand<UserTransportRequest, 
     }
 
     const wrappedRequest: WrappedRequest<Omit<UserTransportRequest, 'userGuid'>> = {
-      statuses: { allow: [200], retry: [0], reauth: [401] },
+      statuses: { allow: [200], retry: [0, 503], reauth: [401] },
       timeout: this.options.timeout,
       url: `https://api.${this.options.tld}/game/v1/user/${request.userGuid}/transport`,
       verb: RequestVerbType.POST,
